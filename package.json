@@ -7,7 +7,9 @@
     "ios": "react-native run-ios",
     "lint": "eslint .",
     "start": "react-native start",
-    "test": "jest"
+    "test": "jest",
+    "wdio:ios": "wdio config/wdio.ios.app.conf.ts --",
+    "build:ios": "xcodebuild -workspace ios/appium.xcworkspace -scheme appium -sdk iphonesimulator -configuration Debug -derivedDataPath ios/build"
   },
   "dependencies": {
     "react": "18.2.0",
@@ -22,12 +24,21 @@
     "@types/jest": "^29.2.1",
     "@types/react": "^18.0.24",
     "@types/react-test-renderer": "^18.0.0",
+    "@wdio/appium-service": "^8.3.2",
+    "@wdio/cli": "^8.3.2",
+    "@wdio/cucumber-framework": "^8.3.0",
+    "@wdio/junit-reporter": "^8.3.0",
+    "@wdio/local-runner": "^8.3.2",
+    "@wdio/spec-reporter": "^8.3.0",
+    "appium": "^1.22.3",
     "babel-jest": "^29.2.1",
     "eslint": "^8.19.0",
     "jest": "^29.2.1",
     "metro-react-native-babel-preset": "0.73.7",
     "prettier": "^2.4.1",
     "react-test-renderer": "18.2.0",
+    "ts-node": "^10.9.1",
+    "tsconfig-paths": "^4.1.2",
     "typescript": "4.8.4"
   },
   "jest": {
