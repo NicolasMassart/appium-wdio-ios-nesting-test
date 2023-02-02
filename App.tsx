@@ -5,28 +5,28 @@
  * @format
  */
 
-import React from 'react';
 import type {PropsWithChildren} from 'react';
+import React, {useState} from 'react';
 import {
+  Button,
   SafeAreaView,
   ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
   useColorScheme,
   View,
 } from 'react-native';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import {Colors} from 'react-native/Libraries/NewAppScreen';
 
 type SectionProps = PropsWithChildren<{
   title: string;
+}>;
+
+type NestedViewProps = PropsWithChildren<{
+  depth?: number;
+  maxDepth: number;
+  onPress: () => void;
 }>;
 
 function Section({children, title}: SectionProps): JSX.Element {
@@ -55,6 +55,30 @@ function Section({children, title}: SectionProps): JSX.Element {
   );
 }
 
+function NestedView({
+  depth = 0,
+  maxDepth,
+  onPress,
+}: NestedViewProps): JSX.Element {
+  if (depth >= maxDepth) {
+    return (
+      <Button
+        onPress={onPress}
+        title="Increment touches"
+        accessibilityLabel="increment touches button"
+      />
+    );
+  }
+
+  const bgColor = depth % 2 === 0 ? 'blue' : 'red';
+  return (
+    <View style={{backgroundColor: bgColor}}>
+      <NestedView depth={depth + 1} maxDepth={maxDepth} onPress={onPress} />
+      <Text>L{depth}</Text>
+    </View>
+  );
+}
+
 function App(): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
 
@@ -62,8 +86,13 @@ function App(): JSX.Element {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
 
+  const [touches, setTouches] = useState(0);
   return (
     <SafeAreaView style={backgroundStyle}>
+      <Section title="App info">
+        Appium issue MetaMask/mobile-planning#452 test app
+      </Section>
+      <Text style={{color: 'red'}}>Touches {touches}</Text>
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         style={backgroundStyle}>
@@ -71,15 +100,12 @@ function App(): JSX.Element {
           style={{
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
           }}>
-          <Section title="App info">
-            Appium issue MetaMask/mobile-planning#452 test app
-          </Section>
-          <View style={{backgroundColor: 'red', padding: 2}}>
-            <Text>1</Text>
-            <View style={{backgroundColor: 'blue'}}>
-              <Text style={{color: 'white'}}>2</Text>
-            </View>
-          </View>
+          <NestedView
+            maxDepth={10}
+            onPress={() => {
+              setTouches(touches + 1);
+            }}
+          />
         </View>
       </ScrollView>
     </SafeAreaView>
