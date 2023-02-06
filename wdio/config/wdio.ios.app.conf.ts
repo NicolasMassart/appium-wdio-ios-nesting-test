@@ -29,6 +29,7 @@ config.capabilities = [
       './ios/build/Build/Products/Debug-iphonesimulator/appium.app',
     ),
     'appium:newCommandTimeout': 240,
+    'appium:printPageSourceOnFindFailure': true,
   },
 ];
 

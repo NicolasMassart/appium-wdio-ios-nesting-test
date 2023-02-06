@@ -9,6 +9,7 @@ import type {PropsWithChildren} from 'react';
 import React, {useState} from 'react';
 import {
   Button,
+  Linking,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -18,6 +19,8 @@ import {
 } from 'react-native';
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
+
+const nestingDepth = 36; // 36 is the limit
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -64,15 +67,19 @@ function NestedView({
     return (
       <Button
         onPress={onPress}
-        title="Increment touches"
-        accessibilityLabel="increment touches button"
+        title={'Increment touches'}
+        accessibilityLabel={'Increment touches'}
+        testID={`increment-touches`}
       />
     );
   }
 
   const bgColor = depth % 2 === 0 ? 'blue' : 'red';
   return (
-    <View style={{backgroundColor: bgColor}}>
+    <View
+      style={{backgroundColor: bgColor}}
+      accessibilityLabel={`L${depth}`}
+      testID={`L${depth}`}>
       <NestedView depth={depth + 1} maxDepth={maxDepth} onPress={onPress} />
       <Text>L{depth}</Text>
     </View>
@@ -89,19 +96,33 @@ function App(): JSX.Element {
   const [touches, setTouches] = useState(0);
   return (
     <SafeAreaView style={backgroundStyle}>
-      <Section title="App info">
-        Appium issue MetaMask/mobile-planning#452 test app
+      <Section title={'App info'}>
+        <Text
+          style={{color: 'blue'}}
+          onPress={() =>
+            Linking.openURL(
+              'https://github.com/MetaMask/mobile-planning/issues/452',
+            )
+          }>
+          Appium issue MetaMask/mobile-planning#452 test app
+        </Text>
       </Section>
-      <Text style={{color: 'red'}}>Touches {touches}</Text>
+      <Section title={`Nesting ${nestingDepth}`}>
+        <Text
+          accessibilityLabel={`touches-${touches}`}
+          testID={`touches-${touches}`}>
+          Touches {touches}
+        </Text>
+      </Section>
       <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
+        contentInsetAdjustmentBehavior={'automatic'}
         style={backgroundStyle}>
         <View
           style={{
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
           }}>
           <NestedView
-            maxDepth={10}
+            maxDepth={nestingDepth}
             onPress={() => {
               setTouches(touches + 1);
             }}
@@ -128,7 +149,7 @@ const styles = StyleSheet.create({
   },
   highlight: {
     fontWeight: '700',
-  },
+  }
 });
 
 export default App;

@@ -1,3 +1,5 @@
+import * as path from 'path';
+
 /**
  * All not needed configurations, for this boilerplate, are removed.
  * If you want to know which configuration options you have then you can
@@ -119,7 +121,7 @@ export const config: WebdriverIO.Config = {
   // Options to be passed to Cucumber.
   cucumberOpts: {
     // <string[]> (file/dir) require files before executing features
-    require: ['./features/step-definitions/steps.ts'],
+    require: [path.join(__dirname, '..' , 'features' , 'stepDefinitions', 'steps.js')],
     // <boolean> show full backtrace for errors
     backtrace: false,
     // <string[]> ("extension:module") require files with the given EXTENSION after requiring MODULE (repeatable)
@@ -140,6 +142,7 @@ export const config: WebdriverIO.Config = {
     timeout: 60000,
     // <boolean> Enable this config to treat undefined definitions as warnings.
     ignoreUndefinedDefinitions: false,
+    failAmbiguousDefinitions: true
   },
   //
   // =====
