@@ -7,20 +7,9 @@
 
 import type {PropsWithChildren} from 'react';
 import React, {useState} from 'react';
-import {
-  Button,
-  Linking,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import {Button, Linking, StyleSheet, Text, View} from 'react-native';
 
-import {Colors} from 'react-native/Libraries/NewAppScreen';
-
-const nestingDepth = 36; // 36 is the limit
+const nestingDepth = 41; // 41 is the limit
 
 console.log('Nesting depth', nestingDepth);
 
@@ -35,27 +24,10 @@ type NestedViewProps = PropsWithChildren<{
 }>;
 
 function Section({children, title}: SectionProps): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
   return (
     <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
+      <Text style={[styles.sectionTitle]}>{title}</Text>
+      <Text style={[styles.sectionDescription]}>{children}</Text>
     </View>
   );
 }
@@ -76,12 +48,8 @@ function NestedView({
     );
   }
 
-  const bgColor = depth % 2 === 0 ? 'blue' : 'red';
   return (
-    <View
-      style={{backgroundColor: bgColor}}
-      accessibilityLabel={`L${depth}`}
-      testID={`L${depth}`}>
+    <View accessible={false}>
       <NestedView depth={depth + 1} maxDepth={maxDepth} onPress={onPress} />
       <Text>L{depth}</Text>
     </View>
@@ -89,15 +57,9 @@ function NestedView({
 }
 
 function App(): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
   const [touches, setTouches] = useState(0);
   return (
-    <SafeAreaView style={backgroundStyle}>
+    <>
       <Section title={'App info'}>
         <Text
           onPress={() =>
@@ -115,22 +77,13 @@ function App(): JSX.Element {
           Touches {touches}
         </Text>
       </Section>
-      <ScrollView
-        contentInsetAdjustmentBehavior={'automatic'}
-        style={backgroundStyle}>
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <NestedView
-            maxDepth={nestingDepth}
-            onPress={() => {
-              setTouches(touches + 1);
-            }}
-          />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+      <NestedView
+        maxDepth={nestingDepth}
+        onPress={() => {
+          setTouches(touches + 1);
+        }}
+      />
+    </>
   );
 }
 
@@ -147,9 +100,6 @@ const styles = StyleSheet.create({
     marginTop: 8,
     fontSize: 18,
     fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
   },
 });
 
