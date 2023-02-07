@@ -9,7 +9,7 @@ import type {PropsWithChildren} from 'react';
 import React, {useState} from 'react';
 import {Button, Linking, StyleSheet, Text, View} from 'react-native';
 
-const nestingDepth = 41; // 41 is the limit
+const nestingDepth = 40; // 40 is the limit
 
 console.log('Nesting depth', nestingDepth);
 
@@ -49,7 +49,7 @@ function NestedView({
   }
 
   return (
-    <View accessible={false}>
+    <View accessible={false} testID={''} accessibilityLabel={''}>
       <NestedView depth={depth + 1} maxDepth={maxDepth} onPress={onPress} />
       <Text>L{depth}</Text>
     </View>
@@ -59,7 +59,7 @@ function NestedView({
 function App(): JSX.Element {
   const [touches, setTouches] = useState(0);
   return (
-    <>
+    <View accessible={false}>
       <Section title={'App info'}>
         <Text
           onPress={() =>
@@ -83,7 +83,7 @@ function App(): JSX.Element {
           setTouches(touches + 1);
         }}
       />
-    </>
+    </View>
   );
 }
 

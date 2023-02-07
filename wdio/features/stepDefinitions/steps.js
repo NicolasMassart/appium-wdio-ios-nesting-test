@@ -4,7 +4,6 @@ const {Given, Then, When} = require('@wdio/cucumber-framework');
 
 Given(/^I launched the app$/, async () => {
   // app launched by the framework
-  await driver.pause(60000); //wait for being able to see change
 });
 
 Given(/^I see the increment button using ([a-z-]+)$/, async type => {
@@ -38,7 +37,6 @@ Given(/^I see the touches (\d+)$/, async number => {
 });
 
 When(/^I touch the increment button$/, async () => {
-  // const button = await $('//XCUIElementTypeButton[@name="increment-touches"]');
   const button = await $('~increment-touches');
   await button.touchAction('tap');
 });
