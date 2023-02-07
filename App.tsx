@@ -80,7 +80,7 @@ function App(): JSX.Element {
       <NestedView
         maxDepth={nestingDepth}
         onPress={() => {
-          setTouches(touches + 1);
+          setTouches(touches => touches + 1);
         }}
       />
     </View>
