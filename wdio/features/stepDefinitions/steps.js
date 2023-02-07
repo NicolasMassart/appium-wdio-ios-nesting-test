@@ -1,9 +1,10 @@
-/* global $, driver, expect */
+/* global $, driver */
 
 const {Given, Then, When} = require('@wdio/cucumber-framework');
 
 Given(/^I launched the app$/, async () => {
   // app launched by the framework
+  await driver.pause(60000); //wait for being able to see change
 });
 
 Given(/^I see the increment button using ([a-z-]+)$/, async type => {
